@@ -7,16 +7,30 @@ on:
   pull_request:
     paths:
       - 'Back-end/Domain 1_Authentication & Security/auth-service/**'
-  workflow_dispatch:  # ✅ permite ejecución manual desde GitHub
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: authdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: 20
@@ -27,4 +41,6 @@ jobs:
 
       - name: Run tests
         working-directory: ./Back-end/Domain 1_Authentication & Security/auth-service
+        env:
+          DATABASE_URL: postgres://user:password@localhost:5432/authdb
         run: npm test
