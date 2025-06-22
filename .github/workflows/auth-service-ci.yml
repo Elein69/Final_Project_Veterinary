@@ -1,4 +1,5 @@
 name: CI - Auth Service
+
 on:
   push:
     paths:
@@ -6,27 +7,24 @@ on:
   pull_request:
     paths:
       - 'Back-end/Domain 1_Authentication & Security/auth-service/**'
+  workflow_dispatch:  # ✅ permite ejecución manual desde GitHub
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Back-end/Domain 1_Authentication & Security/auth-service
-
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        working-directory: ./Back-end/Domain\ 1_Authentication\ \&\ Security/auth-service
+        run: npm install
 
-    - name: Run tests
-      run: npm test
-
-    - name: Build Docker image
-      run: docker build -t auth-service .
+      - name: Run tests
+        working-directory: ./Back-end/Domain\ 1_Authentication\ \&\ Security/auth-service
+        run: npm test
