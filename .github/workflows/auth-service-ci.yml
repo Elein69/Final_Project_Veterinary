@@ -39,8 +39,18 @@ jobs:
         working-directory: ./Back-end/Domain 1_Authentication & Security/auth-service
         run: npm install
 
+<<<<<<< HEAD
       - name: Run tests
         working-directory: ./Back-end/Domain 1_Authentication & Security/auth-service
         env:
           DATABASE_URL: postgres://user:password@localhost:5432/authdb
         run: npm test
+=======
+    - name: Run tests
+      run: npm test
+
+    - name: Build Docker image
+      run: docker build -t auth-service .
+
+# Trigger modified manually
+>>>>>>> 053a939 (Restore CI workflow for Auth Service)
