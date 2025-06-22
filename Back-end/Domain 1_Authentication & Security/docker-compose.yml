@@ -1,0 +1,77 @@
+version: '3.8'
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+    - 3000:3000
+    env_file: ./auth-service/.env
+    depends_on:
+    - postgres-auth
+  login-service:
+    build: ./login-service
+    ports:
+    - 5046:5046
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      JWT_SECRET: supersecurekey
+    depends_on:
+    - mysql-login
+  cors-service:
+    build: ./cors-service
+    ports:
+    - 8083:8083
+    environment:
+      ALLOWED_ORIGINS: http://localhost:3000,http://localhost:4200,https://veterinary-front.com
+      PORT: '8083'
+  role-manager:
+    build: ./role-manager
+    ports:
+    - 8084:8084
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-role:3306/veterinary_roles
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpass
+    depends_on:
+    - mysql-role
+  bastion-access-service:
+    build: ./bastion-access-service
+    ports:
+    - 8085:8085
+    environment:
+      APP_ENV: production
+      JWT_SECRET: supersecurekey
+  postgres-auth:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpass
+      POSTGRES_DB: authdb
+    ports:
+    - 5433:5432
+    volumes:
+    - postgres-auth-data:/var/lib/postgresql/data
+  mysql-login:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: logindb
+    ports:
+    - 3307:3306
+    volumes:
+    - mysql-login-data:/var/lib/mysql
+  mysql-role:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: veterinary_roles
+    ports:
+    - 3308:3306
+    volumes:
+    - mysql-role-data:/var/lib/mysql
+volumes:
+  postgres-auth-data: {}
+  mysql-login-data: {}
+  mysql-role-data: {}
