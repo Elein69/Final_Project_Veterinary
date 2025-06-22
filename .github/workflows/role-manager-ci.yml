@@ -1,0 +1,30 @@
+name: CI - Role Manager
+on:
+  push:
+    paths:
+      - 'Back-end/Domain 1_Authentication & Security/role-manager/**'
+  pull_request:
+    paths:
+      - 'Back-end/Domain 1_Authentication & Security/role-manager/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Back-end/Domain 1_Authentication & Security/role-manager
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Build with Maven
+      run: mvn clean install
+
+    - name: Build Docker image
+      run: docker build -t role-manager .
