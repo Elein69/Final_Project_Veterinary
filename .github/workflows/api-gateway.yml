@@ -2,9 +2,11 @@ name: API Gateway CI
 
 on:
   push:
+    branches: [qa]
     paths:
       - 'Back-end/api-gateway/**'
   pull_request:
+    branches: [main]
     paths:
       - 'Back-end/api-gateway/**'
 

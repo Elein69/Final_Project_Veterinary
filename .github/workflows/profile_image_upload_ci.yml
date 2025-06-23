@@ -2,15 +2,13 @@ name: CI for profile_image_upload
 
 on:
   push:
+    branches: [qa]
     paths:
       - 'profile_image_upload/**'
-    branches:
-      - main
   pull_request:
+    branches: [main]
     paths:
       - 'profile_image_upload/**'
-    branches:
-      - main
 
 jobs:
   build-and-test:
@@ -52,7 +50,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t profile_image_upload-image ./"profile_image_upload"
+        run: docker build -t profile_image_upload-image ./profile_image_upload
 
       - name: Run container
         run: docker run -d -p 8083:8083 --name profile_image_upload profile_image_upload-image

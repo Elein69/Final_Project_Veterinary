@@ -2,15 +2,13 @@ name: CI for audit_service
 
 on:
   push:
+    branches: [qa]
     paths:
       - 'audit_service/**'
-    branches:
-      - main
   pull_request:
+    branches: [main]
     paths:
       - 'audit_service/**'
-    branches:
-      - main
 
 jobs:
   build-and-test:
@@ -52,7 +50,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t audit_service-image ./"audit_service"
+        run: docker build -t audit_service-image ./audit_service
 
       - name: Run container
         run: docker run -d -p 8085:8085 --name audit_service audit_service-image
