@@ -1,8 +1,9 @@
 import { Pool } from 'pg';
-import dotenv from 'dotenv';
-dotenv.config();
+import { DB_CONFIG } from './config/env';
 
-export const db = new Pool({
+export const db = new Pool(DB_CONFIG);
+
+({
   host: process.env.DB_HOST || 'localhost', // fallback para CI
   port: Number(process.env.DB_PORT),
   user: process.env.DB_USER,
