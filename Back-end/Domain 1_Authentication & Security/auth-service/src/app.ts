@@ -1,36 +1,19 @@
-import express from 'express';
-import cors from 'cors';
-import userRoutes from './routes/userRoutes';
 import { db } from './db';
+import { IS_CI } from './config/env';
 import { createUserTable } from './models/userModel';
-import { PORT } from './config/env';
 
-
-
-const app = express();
-
-
-app.use(express.json());
-app.use(cors());
-
-app.use('/api/users', userRoutes);
-
-app.get('/', (_req, res) => {
-  res.send('Auth service is running!');
-});
-
-app.listen(PORT, () => {
-  console.log(`Auth service listening on port ${PORT}`);
-});
-
-db.connect()
-  .then(() => {
-    console.log('✅ Connected to PostgreSQL database');
-    return createUserTable();
-  })
-  .then(() => {
-    console.log('✅ Users table ready');
-  })
-  .catch((err: any) => {
-    console.error('❌ Database connection error:', err);
-  });
+if (!IS_CI) {
+  db.connect()
+    .then(() => {
+      console.log('✅ Connected to PostgreSQL database');
+      return createUserTable();
+    })
+    .then(() => {
+      console.log('✅ Users table ready');
+    })
+    .catch((err: any) => {
+      console.error('❌ Database connection error:', err);
+    });
+} else {
+  console.log('⚠️ Skipping DB connection and table creation in CI');
+}

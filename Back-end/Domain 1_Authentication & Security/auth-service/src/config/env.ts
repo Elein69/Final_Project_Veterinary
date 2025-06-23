@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Si no se define DB_HOST en el entorno, usamos host.docker.internal por defecto
 export const DB_CONFIG = {
   host: process.env.DB_HOST || 'host.docker.internal',
   port: Number(process.env.DB_PORT),
@@ -12,3 +11,4 @@ export const DB_CONFIG = {
 
 export const PORT = process.env.PORT || 3000;
 export const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
+export const IS_CI = process.env.CI === 'true';
