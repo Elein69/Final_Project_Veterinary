@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  profile-image-upload:
+    build: .
+    container_name: profile-image-upload
+    ports:
+      - "8087:8087"
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - image-net
+
+networks:
+  image-net:
+    driver: bridge

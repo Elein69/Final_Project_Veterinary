@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  user-notification-db:
+    image: postgres:16
+    container_name: user_notification_db
+    environment:
+      POSTGRES_DB: veterinary_notifications
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432" # expuesto en 5433 por si ya hay otros PostgreSQL en 5432
+    networks:
+      - user-notification-net
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  user-notification-app:
+    image: user-notification-linker
+    container_name: user_notification_app
+    build: .
+    depends_on:
+      - user-notification-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-notification-db:5432/veterinary_notifications
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - user-notification-net
+
+networks:
+  user-notification-net:
+    driver: bridge
+
+volumes:
+  pgdata:
+

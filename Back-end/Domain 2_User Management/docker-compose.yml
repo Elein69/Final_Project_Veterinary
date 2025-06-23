@@ -1,0 +1,87 @@
+
+version: '3.8'
+
+services:
+
+  user_registry:
+    build: ./user_registry
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user_registry_db:5432/user_registry
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - user_registry_db
+
+  user_registry_db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: user_registry
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+
+  user_preferences:
+    build: ./user_preferences
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user_preferences_db:5432/user_preferences
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - user_preferences_db
+
+  user_preferences_db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: user_preferences
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+
+  profile_image_upload:
+    build: ./profile_image_upload
+    ports:
+      - "8083:8083"
+
+  user_notification_linker:
+    build: ./user_notification_linker
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user_notification_linker_db:5432/user_notification_linker
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - user_notification_linker_db
+
+  user_notification_linker_db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: user_notification_linker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+
+  audit_service:
+    build: ./audit-service
+    ports:
+      - "8085:8085"
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://localstack:4566
+    depends_on:
+      - localstack
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=dynamodb
+      - DEBUG=1

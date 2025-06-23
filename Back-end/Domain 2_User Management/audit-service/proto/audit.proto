@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package audit;
+
+option go_package = "audit_service/proto";
+
+service AuditService {
+  rpc LogEvent (AuditRequest) returns (AuditResponse);
+}
+
+message AuditRequest {
+  string userId = 1;
+  string action = 2;
+  string timestamp = 3;
+}
+
+message AuditResponse {
+  string status = 1;
+}

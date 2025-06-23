@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  user-registry-db:
+    image: postgres:15
+    container_name: user-registry-db
+    environment:
+      POSTGRES_DB: user_registry_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata_user_registry:/var/lib/postgresql/data
+    networks:
+      - user-registry-net
+
+  user-registry:
+    build: .
+    container_name: user-registry
+    depends_on:
+      - user-registry-db
+    ports:
+      - "8085:8085"
+    networks:
+      - user-registry-net
+
+volumes:
+  pgdata_user_registry:
+
+networks:
+  user-registry-net:
