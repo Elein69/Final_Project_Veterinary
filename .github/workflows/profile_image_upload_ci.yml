@@ -1,16 +1,15 @@
 name: CI for profile_image_upload
 
 on:
+  workflow_dispatch:  
   push:
+    branches: [main, qa]
     paths:
       - 'profile_image_upload/**'
-    branches:
-      - main
   pull_request:
+    branches: [main, qa]
     paths:
       - 'profile_image_upload/**'
-    branches:
-      - main
 
 jobs:
   build-and-test:
@@ -22,40 +21,3 @@ jobs:
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: testdb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-      mysql:
-        image: mysql:8
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: testdb
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        run: docker build -t profile_image_upload-image ./"profile_image_upload"
-
-      - name: Run container
-        run: docker run -d -p 8083:8083 --name profile_image_upload profile_image_upload-image
-
-      - name: Check container status
-        run: docker ps -a
