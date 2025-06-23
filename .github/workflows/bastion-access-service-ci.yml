@@ -1,34 +1,39 @@
-name: CI - Bastion Access Service
+name: Bastion Access Service CI
+
 on:
   push:
+    branches: [qa]
     paths:
       - 'Back-end/Domain 1_Authentication & Security/bastion-access-service/**'
   pull_request:
+    branches: [main]
     paths:
       - 'Back-end/Domain 1_Authentication & Security/bastion-access-service/**'
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: Back-end/Domain 1_Authentication & Security/bastion-access-service
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run tests
-      run: pytest
+      - name: Run functional tests
+        run: pytest
 
-    - name: Build Docker image
-      run: docker build -t bastion-access-service .
+      - name: Build Docker image
+        run: docker build -t bastion-access-service .
