@@ -4,13 +4,12 @@ on:
   push:
     paths:
       - 'user_preferences/**'
-    branches:
-      - main
+    branches: [main]
   pull_request:
     paths:
       - 'user_preferences/**'
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:  # Habilita ejecución manual desde GitHub
 
 jobs:
   build-and-test:
@@ -52,10 +51,15 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t user_preferences-image ./"user_preferences"
+        run: |
+          cd user_preferences
+          docker build -t user_preferences-image .
 
       - name: Run container
         run: docker run -d -p 8082:8082 --name user_preferences user_preferences-image
+
+      - name: Show container logs (debug)
+        run: docker logs user_preferences || echo "No logs available"
 
       - name: Check container status
         run: docker ps -a
