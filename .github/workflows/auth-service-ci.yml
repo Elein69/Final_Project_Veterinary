@@ -2,9 +2,11 @@ name: Auth Service CI
 
 on:
   push:
+    branches: [qa]
     paths:
       - 'Back-end/Domain 1_Authentication & Security/auth-service/**'
   pull_request:
+    branches: [main]
     paths:
       - 'Back-end/Domain 1_Authentication & Security/auth-service/**'
 
