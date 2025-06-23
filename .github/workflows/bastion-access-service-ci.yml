@@ -1,18 +1,15 @@
-name: Bastion Access Service CI
+name: CI - Bastion Access Service
 
 on:
   push:
-    branches: [qa]
     paths:
       - 'Back-end/Domain 1_Authentication & Security/bastion-access-service/**'
   pull_request:
-    branches: [main]
     paths:
       - 'Back-end/Domain 1_Authentication & Security/bastion-access-service/**'
-  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -32,7 +29,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run functional tests
+      - name: Run tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}/Back-end/Domain 1_Authentication & Security/bastion-access-service
         run: pytest
 
       - name: Build Docker image
