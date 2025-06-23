@@ -4,13 +4,12 @@ on:
   push:
     paths:
       - 'user_registry/**'
-    branches:
-      - main
+    branches: [main]
   pull_request:
     paths:
       - 'user_registry/**'
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:  # Permite ejecutar manualmente el workflow
 
 jobs:
   build-and-test:
@@ -52,7 +51,18 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t user_registry-image ./"user_registry"
+        run: |
+          cd user_registry
+          docker build -t user_registry-image .
+
+      - name: Run container
+        run: docker run -d -p 8081:8081 --name user_registry user_registry-image
+
+      - name: Show container logs (debug)
+        run: docker logs user_registry || echo "No logs available"
+
+      - name: Check container status
+        run: docker ps -a
 
       - name: Run container
         run: docker run -d -p 8081:8081 --name user_registry user_registry-image
