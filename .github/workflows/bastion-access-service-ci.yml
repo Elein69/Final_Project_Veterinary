@@ -1,6 +1,7 @@
 name: CI - Bastion Access Service
 
 on:
+ workflow_dispatch:
   push:
     paths:
       - 'Back-end/Domain 1_Authentication & Security/bastion-access-service/**'
