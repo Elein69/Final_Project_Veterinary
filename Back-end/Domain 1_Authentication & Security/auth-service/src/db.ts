@@ -1,7 +1,9 @@
 import { Pool } from 'pg';
-import { DB_CONFIG } from './config/env';
+import { DB_CONFIG, IS_CI } from './config/env';
 
-export const db = new Pool(DB_CONFIG);
+export const db = IS_CI
+  ? { connect: async () => console.log('⚠️ CI: DB connection mocked') }
+  : new Pool(DB_CONFIG);
 
 ({
   host: process.env.DB_HOST || 'localhost', // fallback para CI
