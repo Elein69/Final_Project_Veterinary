@@ -84,4 +84,4 @@ This is the authentication service for the veterinary system.
 
 ✅ CI Integrated with GitHub Actions (:
 
-✅ Triggered update to test GitHub Actions
+✅ Triggered update to test GitHub Actions (:
