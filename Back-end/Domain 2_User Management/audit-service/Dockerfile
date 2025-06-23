@@ -13,6 +13,6 @@ WORKDIR /app
 
 COPY --from=build /app/audit-service .
 
-EXPOSE 8084
+EXPOSE 8087
 
 CMD ["./audit-service"]

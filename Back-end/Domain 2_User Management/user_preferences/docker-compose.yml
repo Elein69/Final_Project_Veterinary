@@ -16,7 +16,7 @@ services:
       context: .
     container_name: user-preferences
     ports:
-      - "8086:8086"
+      - "8082:8082"
     depends_on:
       - user-preferences-db
     environment:

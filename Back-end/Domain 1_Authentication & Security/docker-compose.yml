@@ -3,19 +3,25 @@ services:
   auth-service:
     build: ./auth-service
     ports:
-    - 3000:3000
+    - 8090:8090
     env_file: ./auth-service/.env
     depends_on:
     - postgres-auth
+  services:
   login-service:
     build: ./login-service
+    container_name: login-service
     ports:
-    - 5046:5046
+      - "8185:8085"
+    networks:
+      - backend-net
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       JWT_SECRET: supersecurekey
     depends_on:
     - mysql-login
+    restart: unless-stopped
+
   cors-service:
     build: ./cors-service
     ports:
@@ -26,7 +32,7 @@ services:
   role-manager:
     build: ./role-manager
     ports:
-    - 8084:8084
+    - 8184:8084
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-role:3306/veterinary_roles
       SPRING_DATASOURCE_USERNAME: root
@@ -36,7 +42,7 @@ services:
   bastion-access-service:
     build: ./bastion-access-service
     ports:
-    - 8085:8085
+    - 8089:8089
     environment:
       APP_ENV: production
       JWT_SECRET: supersecurekey

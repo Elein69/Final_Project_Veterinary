@@ -17,7 +17,7 @@ COPY . .
 # RUN npm run build
 
 # Expose the port your app listens on
-EXPOSE 3000
+EXPOSE 8090
 
 # Start the application using ts-node-dev or node (adjust for your entry point)
 CMD ["npx", "ts-node-dev", "src/app.ts"]

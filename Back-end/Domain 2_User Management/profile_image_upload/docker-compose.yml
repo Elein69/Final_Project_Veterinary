@@ -5,7 +5,7 @@ services:
     build: .
     container_name: profile-image-upload
     ports:
-      - "8087:8087"
+      - "8086:8086"
     volumes:
       - ./uploads:/app/uploads
     networks:

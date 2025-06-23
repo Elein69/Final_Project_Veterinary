@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+
+  profile-image-upload:
+    build:
+      context: ./Domain 2_User Management/profile_image_upload
+    ports:
+      - "8086:8086"
+
+  audit-service:
+    build:
+      context: ./Domain 2_User Management/audit-service
+    ports:
+      - "8087:8087"
+
+  user-registry:
+    build:
+      context: ./Domain 2_User Management/user_registry
+    ports:
+      - "8081:8081"
+
+  user-preferences:
+    build:
+      context: ./Domain 2_User Management/user_preferences
+    ports:
+      - "8082:8082"
+
+  user-notification-linker:
+    build:
+      context: ./Domain 2_User Management/user_notification_linker
+    ports:
+      - "8083:8083"
+
+  role-manager:
+    build:
+      context: ./Domain 1_Authentication & Security/role-manager
+    ports:
+      - "8084:8084"
+
+  login-service:
+    build:
+      context: ./Domain 1_Authentication & Security/login-service
+    ports:
+      - "8085:8085"
+
+  cors-service:
+    build:
+      context: ./Domain 1_Authentication & Security/cors-service
+    ports:
+      - "8088:8088"
+
+  bastion-access-service:
+    build:
+      context: ./Domain 1_Authentication & Security/bastion-access-service
+    ports:
+      - "8089:8089"
+
+  auth-service:
+    build:
+      context: ./Domain 1_Authentication & Security/auth-service
+    ports:
+      - "8090:8090"
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres-auth-data: {}
+  mysql-login-data: {}
+  mysql-role-data: {}
+
+networks:
+  backend-net:
+    driver: bridge
