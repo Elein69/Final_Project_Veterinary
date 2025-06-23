@@ -1,8 +1,8 @@
 import request from 'supertest';
 import express from 'express';
 import userRoutes from '../src/routes/userRoutes';
-import dotenv from 'dotenv';
-dotenv.config();
+import '../src/config/env'; 
+
 
 const app = express();
 app.use(express.json());
