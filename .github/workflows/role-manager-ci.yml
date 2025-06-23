@@ -1,5 +1,7 @@
 name: CI - Role Manager
+
 on:
+  workflow_dispatch:  # 👉 permite correr manualmente desde GitHub Actions
   push:
     paths:
       - 'Back-end/Domain 1_Authentication & Security/role-manager/**'
@@ -15,7 +17,8 @@ jobs:
         working-directory: Back-end/Domain 1_Authentication & Security/role-manager
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     - name: Set up Java
       uses: actions/setup-java@v4
