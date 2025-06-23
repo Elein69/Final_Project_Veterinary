@@ -82,6 +82,6 @@ Runs automatically when any changes are made to the auth-service/ directory.
 
 This is the authentication service for the veterinary system.
 
-✅ CI Integrated with GitHub Actions
+✅ CI Integrated with GitHub Actions (:
 
 ✅ Triggered update to test GitHub Actions
