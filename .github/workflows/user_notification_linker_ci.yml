@@ -4,13 +4,12 @@ on:
   push:
     paths:
       - 'user_notification_linker/**'
-    branches:
-      - main
+    branches: [main]
   pull_request:
     paths:
       - 'user_notification_linker/**'
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch: 
 
 jobs:
   build-and-test:
@@ -52,10 +51,16 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t user_notification_linker-image ./"user_notification_linker"
+        run: |
+          cd user_notification_linker
+          docker build -t user_notification_linker-image .
 
       - name: Run container
-        run: docker run -d -p 8084:8084 --name user_notification_linker user_notification_linker-image
+        run: |
+          docker run -d -p 8084:8084 --name user_notification_linker user_notification_linker-image
+
+      - name: Show container logs (debug)
+        run: docker logs user_notification_linker || echo "No logs available"
 
       - name: Check container status
         run: docker ps -a
