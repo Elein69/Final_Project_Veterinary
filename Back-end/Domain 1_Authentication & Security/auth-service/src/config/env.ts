@@ -1,14 +1,14 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const PORT = process.env.PORT || 3000;
-
+// Si no se define DB_HOST en el entorno, usamos host.docker.internal por defecto
 export const DB_CONFIG = {
-  host: process.env.DB_HOST || 'localhost',
-  port: Number(process.env.DB_PORT) || 5432,
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || '',
+  host: process.env.DB_HOST || 'host.docker.internal',
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 };
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+export const PORT = process.env.PORT || 3000;
+export const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
